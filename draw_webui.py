@@ -121,13 +121,15 @@ class webui_(object):
     inpaint_full_res: bool =   True,
     inpaint_full_res_padding:int = 0,
     inpainting_mask_invert: int =0,
+    
+    #从init.json中导入一些变量
     api_t2i:str = "",
     api_i2i:str = "",
     #request的json
     playload = {}
     
     #初始化数据
-    def __init__(self,img_data) -> None:
+    def __init__(self,img_data,data) -> None:
         #提示词
         self.prompt = img_data['prompt']  
         self.negative_prompt = img_data['uc']
@@ -143,8 +145,8 @@ class webui_(object):
         self.denoising_strength = img_data['strength']
         if img_data["image"] != None:
            self.init_images.append(img_data["image"]) 
-        self.api_t2i = img_data["api_t2i"]
-        self.api_i2i = img_data["api_i2i"]
+        self.api_t2i = data["api_t2i"]
+        self.api_i2i = data["api_i2i"]
         
     def text2img(self):
     

@@ -231,7 +231,7 @@ def generate():
         response = Response()       
         img_data = json.loads(request.get_data(as_text=True))
         #初始化数据
-        imgdata = webui_(img_data)    
+        imgdata = webui_(img_data,data)    
         #获取数据
         imgdata.text2img(data)
         imgdata.generate(response,data)
