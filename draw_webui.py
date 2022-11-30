@@ -149,7 +149,8 @@ class webui_(object):
         #img_data['sampler'] = self.sampler_index
         #生成数量：n_samples没有使用
         self.seed = img_data["seed"]  
-        self.denoising_strength = img_data['strength']
+        if img_data['strength'] != None:
+            self.denoising_strength = img_data['strength']
         if img_data["image"] != None:
            self.init_images = img_data["image"]
         self.api_t2i = data["api_t2i"]
