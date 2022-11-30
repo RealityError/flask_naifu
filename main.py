@@ -216,7 +216,7 @@ def chat():
 #绘画网页
 @app.route('/naifu')
 def naifu():
-    return render_template("naifu.html",error = data)
+    return render_template("naifu.html")
 
 #生成
 @app.route('/generate-stream',methods=['POST'])
