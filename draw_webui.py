@@ -217,7 +217,7 @@ class webui_(object):
                 with open(r"output/"+str(fmd5)+ ".png", "wb") as fh:
                     fh.write(image_s)
                 images_encoded.append(image)
-        
+                self.seed += 1
         for x in images_encoded:
             ptr += 1
             data+= ("event: newImage\nid: {}\ndata:{}\n\n").format(ptr, x)
