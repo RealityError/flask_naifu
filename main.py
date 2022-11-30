@@ -233,7 +233,6 @@ def generate():
         #初始化数据
         imgdata = webui_(img_data,data)    
         #获取数据
-        imgdata.text2img(data)
         imgdata.generate(response,data)
         
         return response

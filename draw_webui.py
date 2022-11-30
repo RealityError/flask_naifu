@@ -192,8 +192,10 @@ class webui_(object):
         #向本地webui端发送请求
         if self.include_init_images == True:
             api = self.api_i2i
+            self.img2img()
         else:
             api = self.api_t2i
+            self.text2img()
         
         # TODO(me): 这里记得写多网站队列（感觉用不上。）和多图生成
         req = requests.post(url = setting_data["draw"]["webui"][0]+api,json=self.payload)
