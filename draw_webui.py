@@ -218,6 +218,11 @@ class webui_(object):
                     fh.write(image_s)
                 images_encoded.append(image)
                 self.seed += 1
+                newseed = {
+                    "seed":self.seed,
+                    }
+                
+                self.payload.update(newseed)
         for x in images_encoded:
             ptr += 1
             data+= ("event: newImage\nid: {}\ndata:{}\n\n").format(ptr, x)
