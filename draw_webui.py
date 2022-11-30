@@ -1,5 +1,7 @@
 import requests,base64
 import hashlib
+import logging
+
 class webui_(object):
     '''
     定义画图初始类，其实并不需要全部内容生成json
@@ -111,7 +113,7 @@ class webui_(object):
     s_noise: int = 1
     override_settings: list = []
     sampler_index: str = "Euler" 
-    init_images: list = []
+    init_images: str = None
     denoising_strength: float = 0
     include_init_images: bool = False
     resize_mode : int = 0
@@ -144,7 +146,7 @@ class webui_(object):
         self.seed = img_data["seed"]  
         self.denoising_strength = img_data['strength']
         if img_data["image"] != None:
-           self.init_images.append(img_data["image"]) 
+           self.init_images = img_data["image"]
         self.api_t2i = data["api_t2i"]
         self.api_i2i = data["api_i2i"]
         
@@ -161,7 +163,6 @@ class webui_(object):
         "negative_prompt": self.negative_prompt,
         "sampler_index": self.sampler_index
         }
-        self.include_init_images = False
         
     def img2img(self):
     
@@ -182,7 +183,7 @@ class webui_(object):
         "sampler_index": self.sampler_index
         }
         self.payload.update(img_payload)
-        self.include_init_images = True
+
         
     def generate(self,response,setting_data):
         #初始变量
@@ -190,13 +191,12 @@ class webui_(object):
         data = ""
         ptr = 0
         #向本地webui端发送请求
-        if self.include_init_images == True:
+        if self.init_images != None:
             api = self.api_i2i
             self.img2img()
         else:
             api = self.api_t2i
             self.text2img()
-        
         # TODO(me): 这里记得写多网站队列（感觉用不上。）和多图生成
         req = requests.post(url = setting_data["draw"]["webui"][0]+api,json=self.payload)
         if str(req) == "<Response [200]>":
