@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>喵喵喵</title>
+    <link rel="icon" href="static/icons/miaomiao.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container right-panel-active">
+    <!-- 注册 -->
+    <div class="container_form container--signup">
+        <form action="/" class="form" method="GET"> 
+        <div style="width: 100px;height: 200px;text-align:center;">
+            
+            <img src="static/pic/qqgroup.png" style="width: 100px;height:100px" alt="加群">
+            <a href="https://jq.qq.com/?_wv=1027&k=pG1ykwJa">访问QQ群获取注册资格</a>
+            
+        </form>
+                
+        <form action="/reg" method="GET"> 
+            <button class="btn">注册</button>
+        </form>
+        <h2 >{{msg}}</h2>
+    </div>
+    </div>
+
+    <!-- 登录 -->
+    <div class="container_form container--signin">
+        <form action="/login" class="form" method="post">
+            <h2 class="form_title">登录</h2>
+            <input type="QQ"  name="QQ_login"placeholder="QQ" class="input" />
+            <input type="password" name="password_login" placeholder="密码" class="input" />
+            <h2 >{{msg}}</h2>
+            <a href="help" class="link">忘记了密码？</a>
+            <button class="btn">登录</button>
+        </form>
+    </div>
+
+    <!-- 浮层 -->
+    <div class="container_overlay">
+        <div class="overlay">
+            <div class="overlay_panel overlay--left">
+                <button class="btn" id="signIn">登录</button>
+            </div>
+            <div class="overlay_panel overlay--right">
+                <button class="btn" id="signUp">注册</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 背景 -->
+<div class="slidershow">
+    <div class="slidershow--image" style="background-image: url('/static/pic/haha.jpg')"></div>
+    <div class="slidershow--image" style="background-image: url('/static/pic/lubenwei.gif')"></div>
+    <div class="slidershow--image" style="background-image: url('/static/pic/pizza.jpg')"></div>
+    <div class="slidershow--image" style="background-image: url('/static/pic/cura.gif')"></div>
+</div>
+
+<!-- partial -->
+  <script src="/static/script.js"></script>
+  
+</body>
+</html>

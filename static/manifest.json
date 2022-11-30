@@ -1,0 +1,22 @@
+{
+  "short_name": "喵喵喵",
+  "name": "白猫猫的ai绘画网站",
+  "start_url": "/",
+  "orientation": "portrait",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "src": "/static/icons/miaomiao.png",
+      "sizes": "512x512",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/static/icons/miaomiao.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

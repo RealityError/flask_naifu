@@ -1,0 +1,6 @@
+venv/
+output/
+text.py
+t.txt
+init.json
+*.db
