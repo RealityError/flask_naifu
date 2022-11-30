@@ -3,17 +3,37 @@ from datetime import timedelta
 from flask import Flask, render_template, Response, make_response, request, session ,redirect,url_for,flash,get_flashed_messages
 import time
 import requests
+
+
 #导入初始化json
 import json
 with open("init.json") as json_file:
 	data = json.load(json_file)
+ 
+ 
 #初始化webui类
 from draw_webui import webui_
 from flask_sqlalchemy import SQLAlchemy
 
 #设置日志
 import logging
-logging.basicConfig(level=logging.INFO)#INFO等级
+from logging.handlers import TimedRotatingFileHandler
+def setup_log():
+    # 定义日志输出格式
+    fmt_str = '%(asctime)s[level-%(levelname)s][%(name)s]:%(message)s'
+    logging.basicConfig(level=logging.INFO)
+    # when可设置月、日、时、分、秒等; interval: n个when更新一次; backupCount: 保留m个文件
+    files_handle = TimedRotatingFileHandler("log/", when='D', interval=5)  # when S M H D midnight
+    # 注意时间的格式，区别 - 和 _ , 格式不对影响日志的删除
+    files_handle.suffix = "%Y-%m-%d_%H-%M-%S.txt"
+    # 设置日志输出级别和格式
+    # files_handle.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(fmt_str)
+    files_handle.setFormatter(formatter)
+    # 添加到日志处理对象集合
+    logging.getLogger('').addHandler(files_handle)
+ 
+setup_log()
 
 import os
 #获取当前文件夹路径
@@ -115,11 +135,13 @@ def start():
         
         else:
                         
-            if user_info.password != password:
+            if (user_info.password != password) and (user_info.password is not None):
                 return render_template('login.html', msg="密码错误")
             
             elif user_info.password == "":
-                user.query.filter_by(qq=qq).first().update({'password': password})
+                usee_reg = user.query.filter_by(qq=qq).first()
+                usee_reg.password = password
+                db.session.commit()
                 session['qq'] = str(qq)
                 logging.info("IP:"+str(ip)+"的用户(QQ:"+str(request.form.get('QQ_login'))+")登录网站(REG_IN)")
                 return redirect("/index")
@@ -206,32 +228,14 @@ def generate():
 
   
     if request.method == "POST":
-        response = Response() 
-        # user_info = user.query.filter_by(qq=qq).first()
-        # image = base64.b64encode(user_info.user_pic).decode("ascii")
-        # fd = open("t.txt", 'a+')
-        # fd.write(str(user_info.user_pic))
-        # fd.write('\n')
-        # fd.write(image)
-        # images_encoded = []
-        # ptr = 0
-        # data = ""
-        # images_encoded.append(image)
-        # for x in images_encoded:
-        #     ptr += 1
-        #     data+= ("event: newImage\nid: {}\ndata:{}\n\n").format(ptr, x)
-    
-        # response.data = data
-        # response.media_type = "text/event-stream" 
-        
-        # return response
-        
-        
+        response = Response()       
         img_data = json.loads(request.get_data(as_text=True))
         #初始化数据
         imgdata = webui_(img_data)    
         #获取数据
-        response = imgdata.text2img(response,data)
+        imgdata.text2img(data)
+        imgdata.generate(response,data)
+        
         return response
     else:
         pass

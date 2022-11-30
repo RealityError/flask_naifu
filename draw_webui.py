@@ -1,7 +1,5 @@
 import requests,base64
 import hashlib
-from PIL import Image
-from PIL.PngImagePlugin import PngInfo
 class webui_(object):
     '''
     定义画图初始类，其实并不需要全部内容生成json
@@ -123,6 +121,10 @@ class webui_(object):
     inpaint_full_res: bool =   True,
     inpaint_full_res_padding:int = 0,
     inpainting_mask_invert: int =0,
+    api_t2i:str = "",
+    api_i2i:str = "",
+    #request的json
+    playload = {}
     
     #初始化数据
     def __init__(self,img_data) -> None:
@@ -133,20 +135,21 @@ class webui_(object):
         self.width = img_data['width']  
         self.height = img_data['height']  
         self.cfg_scale = img_data['scale'] 
-        self.steps = img_data['steps']  
-        
+        self.steps = img_data['steps']   
         # TODO(me): 这里记得改采样方式对照表
         #img_data['sampler'] = self.sampler_index
-        
         #生成数量：n_samples没有使用
-        self.seed = img_data["seed"]   
-    def text2img(self,response,setting_data):
-    #初始变量
-        images_encoded = []
-        data = ""
-        ptr = 0
+        self.seed = img_data["seed"]  
+        self.denoising_strength = img_data['strength']
+        if img_data["image"] != None:
+           self.init_images.append(img_data["image"]) 
+        self.api_t2i = img_data["api_t2i"]
+        self.api_i2i = img_data["api_i2i"]
+        
+    def text2img(self):
+    
     #数据导入
-        payload = {
+        self.payload = {
         "prompt":self.prompt,
         "seed": self.seed,
         "steps": self.steps,
@@ -156,10 +159,42 @@ class webui_(object):
         "negative_prompt": self.negative_prompt,
         "sampler_index": self.sampler_index
         }
+        self.include_init_images = False
+        
+    def img2img(self):
     
-    #向本地webui端发送请求，获取
-        # TODO(me): 这里记得写多网站队列   
-        req = requests.post(url = setting_data["draw"]["webui"][0],json=payload)
+        img_payload = {
+                    "init_images": [
+                        'data:image/png;base64,' + self.init_images
+                    ],
+                    "denoising_strength": self.denoising_strength
+                }   
+        self.payload = {
+        "prompt":self.prompt,
+        "seed": self.seed,
+        "steps": self.steps,
+        "cfg_scale": self.cfg_scale,
+        "width":  self.width,
+        "height": self.height,
+        "negative_prompt": self.negative_prompt,
+        "sampler_index": self.sampler_index
+        }
+        self.payload.update(img_payload)
+        self.include_init_images = True
+        
+    def generate(self,response,setting_data):
+        #初始变量
+        images_encoded = []
+        data = ""
+        ptr = 0
+        #向本地webui端发送请求
+        if self.include_init_images == True:
+            api = self.api_i2i
+        else:
+            api = self.api_t2i
+        
+        # TODO(me): 这里记得写多网站队列（感觉用不上。）和多图生成
+        req = requests.post(url = setting_data["draw"]["webui"][0]+api,json=self.payload)
         if str(req) == "<Response [200]>":
             img_data = req.json()
         image = img_data['images'][0]

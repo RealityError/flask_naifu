@@ -1,5 +1,8 @@
 venv/
 output/
+log/
+
+
 text.py
 t.txt
 init.json
