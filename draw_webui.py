@@ -129,7 +129,7 @@ class webui_(object):
     api_i2i:str = "",
     #request的json
     playload = {}
-    
+    n_samples:int = 0
     #初始化数据
     def __init__(self,img_data,data) -> None:
         #提示词
@@ -138,8 +138,13 @@ class webui_(object):
         #图片大小
         self.width = img_data['width']  
         self.height = img_data['height']  
+        
         self.cfg_scale = img_data['scale'] 
         self.steps = img_data['steps']   
+        
+        #图片数量
+        self.n_samples = img_data["n_samples"]
+        
         # TODO(me): 这里记得改采样方式对照表
         #img_data['sampler'] = self.sampler_index
         #生成数量：n_samples没有使用
@@ -197,17 +202,21 @@ class webui_(object):
         else:
             api = self.api_t2i
             self.text2img()
-        # TODO(me): 这里记得写多网站队列（感觉用不上。）和多图生成
-        req = requests.post(url = setting_data["draw"]["webui"][0]+api,json=self.payload)
-        if str(req) == "<Response [200]>":
-            img_data = req.json()
-        image = img_data['images'][0]
-        image_s = base64.b64decode(image)   
-        fmd5 = hashlib.md5(image_s).hexdigest()
-        with open(r"output/"+str(fmd5)+ ".png", "wb") as fh:
-            fh.write(image_s)
-
-        images_encoded.append(image)
+        # TODO(me): 这里记得写多网站队列（感觉用不上。
+        
+        
+        #多图生成
+        for i in range(self.n_samples):
+            req = requests.post(url = setting_data["draw"]["webui"][0]+api,json=self.payload)
+            if str(req) == "<Response [200]>":
+                img_data = req.json()
+                image = img_data['images'][0]
+                image_s = base64.b64decode(image)   
+                fmd5 = hashlib.md5(image_s).hexdigest()
+                with open(r"output/"+str(fmd5)+ ".png", "wb") as fh:
+                    fh.write(image_s)
+                images_encoded.append(image)
+        
         for x in images_encoded:
             ptr += 1
             data+= ("event: newImage\nid: {}\ndata:{}\n\n").format(ptr, x)

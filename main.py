@@ -224,9 +224,7 @@ def generate():
     #验证用户的登录状态
     qq=session.get('qq')
     ip = request.remote_addr
-    
 
-  
     if request.method == "POST":
         response = Response()       
         img_data = json.loads(request.get_data(as_text=True))
