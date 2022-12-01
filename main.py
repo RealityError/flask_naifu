@@ -102,14 +102,14 @@ class user_pic(db.Model):
 #根页面
 @app.route('/',methods=['GET','POST'])
 def root():
-    ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     logging.info("IP:"+str(ip)+"访问了网站")
     return render_template("login.html")
 
 #登录页面
 @app.route('/login',methods=['GET','POST'])
 def start():
-    ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     
     
     if request.method == "GET":
