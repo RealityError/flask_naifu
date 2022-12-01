@@ -253,7 +253,7 @@ def pic_selfshow():
     user_info_pic = user_pic.query.filter_by(user_id=qq).all()
     if len(user_info_pic) > 0:
         for info_num in range(len(user_info_pic)):
-            [info_num].pic = base64.b64encode(open(r'output/'+user_info_pic[info_num].hash_pic+".png", 'rb').read()).decode('utf-8')
+            user_info_pic[info_num].pic = base64.b64encode(open(r'output/'+user_info_pic[info_num].hash_pic+".png", 'rb').read()).decode('utf-8')
         
     return render_template("pic_user.html",user =user_info.user_name,pic_get = user_info_pic )
 #--------------------------------------------------------------------
