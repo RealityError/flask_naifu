@@ -194,7 +194,7 @@ class webui_(object):
     def generate(self,response,setting_data):
         t1 = Thread(target=self.generate_thread, args=(response,setting_data))
         t1.start()
-        
+        t1.join() 
     def generate_thread(self,response,setting_data):
         #初始变量
         images_encoded = []
