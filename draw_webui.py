@@ -1,6 +1,7 @@
 import requests,base64
 import hashlib
 import logging
+from threading import Thread
 
 class webui_(object):
     '''
@@ -190,8 +191,11 @@ class webui_(object):
         }
         self.payload.update(img_payload)
 
-        
     def generate(self,response,setting_data):
+        t1 = Thread(target=self.generate_thread, args=(response,setting_data))
+        t1.start()
+        
+    def generate_thread(self,response,setting_data):
         #初始变量
         images_encoded = []
         data = ""
