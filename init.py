@@ -66,8 +66,23 @@ with app.app_context():
 # 生成时间
 # """
 #仅创建表格，不用初始化数据
-    pic = user_pic()
+    pic1 = user_pic(
+        pic_id = 1,
+        user_id = int(data["QQ"]),
+        hash_pic = "b66d7232f5d7a9b388811910214e033e",
+        Nprompt = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, 1111111111111",
+        prompt = "masterpiece, best quality, 1",
+        size_pic = round(os.path.getsize('output/'+"b66d7232f5d7a9b388811910214e033e"+".png")/1000000,3)
+    )
+    pic2 = user_pic(    
+        user_id = int(data["QQ"]),
+        hash_pic = "d0273d2c154039e2252743cfe0d8d5c6",
+        Nprompt = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, 1111111111111",
+        prompt = "masterpiece, best quality, 1",
+        size_pic = round(os.path.getsize('output/'+"d0273d2c154039e2252743cfe0d8d5c6"+".png")/1000000,3)
+    )
+    
 # 提交并存储
-    db.session.add_all([user_master,pic])
+    db.session.add_all([user_master,pic1,pic2])
     db.session.commit()
 

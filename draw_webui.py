@@ -131,6 +131,8 @@ class webui_(object):
     #request的json
     playload = {}
     n_samples:int = 0
+    #传出的数据
+    hash :str =None 
     #初始化数据
     def __init__(self,img_data,data) -> None:
         #提示词
@@ -217,8 +219,8 @@ class webui_(object):
                 img_data = req.json()
                 image = img_data['images'][0]
                 image_s = base64.b64decode(image)   
-                fmd5 = hashlib.md5(image_s).hexdigest()
-                with open(r"output/"+str(fmd5)+ ".png", "wb") as fh:
+                self.hash = str(hashlib.md5(image_s).hexdigest())
+                with open(r"output/"+self.hash +".png", "wb") as fh:
                     fh.write(image_s)
                 images_encoded.append(image)
                 self.seed += 1
