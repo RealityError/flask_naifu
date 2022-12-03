@@ -23,7 +23,7 @@ def setup_log():
     fmt_str = '%(asctime)s[level-%(levelname)s][%(name)s]:%(message)s'
     logging.basicConfig(level=logging.INFO)
     # when可设置月、日、时、分、秒等; interval: n个when更新一次; backupCount: 保留m个文件
-    files_handle = TimedRotatingFileHandler("log/server.log", when='D', interval=5)  # when S M H D midnight
+    files_handle = TimedRotatingFileHandler("log/server.log", when='H', interval=1)  # when S M H D midnight
     # 注意时间的格式，区别 - 和 _ , 格式不对影响日志的删除
     files_handle.suffix = "%Y-%m-%d_%H-%M-%S.txt"
     # 设置日志输出级别和格式
@@ -254,7 +254,8 @@ def pic_selfshow():
     if len(user_info_pic) > 0:
         for info_num in range(len(user_info_pic)):
             user_info_pic[info_num].pic = base64.b64encode(open(r'output/'+user_info_pic[info_num].hash_pic+".png", 'rb').read()).decode('utf-8')
-        
+    print(type(user_info_pic))
+    user_info_pic.reverse()
     return render_template("pic_user.html",user =user_info.user_name,pic_get = user_info_pic )
 #--------------------------------------------------------------------
 
